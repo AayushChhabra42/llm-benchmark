@@ -40,15 +40,37 @@ def run_ollama(prompt):
             text=True
         )
         # Capture and return the output
-        return process.stdout.strip()
+        return process.stdout.strip(), process.stderr.strip()
     except Exception as e:
-        return f"Error: {e}"
+        return None, f"Error: {e}"
 
 # Iterate through prompts and log responses
+results = {}
 for category, category_prompts in prompts.items():
     print(f"--- {category.upper()} ---")
+    results[category] = []
     for idx, prompt in enumerate(category_prompts, start=1):
-        print(f"Prompt {idx}: {prompt}")
-        response = run_ollama(prompt)  # Call the function with the current prompt
-        print(f"Response: {response}\n")
+        print(f"Running Prompt {idx}: {prompt}")
+        stdout, stderr = run_ollama(prompt)
+        print("--- Verbose Output ---")
+        print(stdout)
+        if stderr:
+            print("--- Error/Additional Output ---")
+            print(stderr)
+        results[category].append({
+            "prompt": prompt,
+            "verbose_output": stdout,
+            "error_output": stderr
+        })
         time.sleep(1)  # Optional delay to avoid overwhelming the system
+
+# Save results to a file
+with open("ollama_results_verbose.txt", "w") as f:
+    for category, logs in results.items():
+        f.write(f"--- {category.upper()} ---\n")
+        for log in logs:
+            f.write(f"Prompt: {log['prompt']}\n")
+            f.write(f"Verbose Output:\n{log['verbose_output']}\n")
+            if log['error_output']:
+                f.write(f"Error/Additional Output:\n{log['error_output']}\n")
+            f.write("\n")
