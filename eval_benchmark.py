@@ -3,7 +3,7 @@ import time
 
 # Configuration
 OLLAMA_EXECUTABLE = "./ollama"  # Path to your Ollama executable
-MODEL_NAME = "llama3.2:1b"  # Replace with the model you want to use
+MODEL_NAME = "gemma2:2b"  # Replace with the model you want to use
 prompts = {
     "translation": [
         "Translate the following paragraph from English to French: 'The rapid advancement of artificial intelligence is reshaping industries globally.'",
