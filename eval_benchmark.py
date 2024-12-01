@@ -35,7 +35,7 @@ def run_ollama(prompt):
         # Execute the command
         process = subprocess.run(
             command,
-            input=prompt.encode(),  # Send the prompt via standard input
+            input=prompt,  # Pass the prompt directly as input
             capture_output=True,
             text=True
         )
@@ -49,6 +49,6 @@ for category, category_prompts in prompts.items():
     print(f"--- {category.upper()} ---")
     for idx, prompt in enumerate(category_prompts, start=1):
         print(f"Prompt {idx}: {prompt}")
-        response = run_ollama(prompt)
+        response = run_ollama(prompt)  # Call the function with the current prompt
         print(f"Response: {response}\n")
         time.sleep(1)  # Optional delay to avoid overwhelming the system
